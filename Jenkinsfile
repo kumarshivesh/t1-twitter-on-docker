@@ -2,10 +2,20 @@ pipeline {
     agent any
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                script {
+                    sh 'rm -rf *'
+                    sh 'chown -R jenkins:jenkins /var/jenkins_home/workspace/mantletwitter'
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 script {
                     checkout scm
+                    sh 'git status' // Verify that the repository was checked out
                 }
             }
         }
