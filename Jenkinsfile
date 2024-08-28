@@ -10,6 +10,8 @@ pipeline {
             }
         }
 
+        // Comment out the other stages for now
+        /*
         stage('Cleanup Previous Containers') {
             steps {
                 script {
@@ -34,15 +36,14 @@ pipeline {
                 }
             }
         }
+        */
     }
 
     post {
         always {
             script {
-                // Clean up Docker resources
                 sh 'echo "y" | docker system prune -a --volumes'
             }
         }
     }
-
 }
