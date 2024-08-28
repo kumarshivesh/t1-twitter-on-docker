@@ -1,25 +1,46 @@
 pipeline {
-    agent {
-        docker {
-            image 'docker/compose:1.29.2'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
+
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    checkout scm
+                }
             }
         }
+
+        stage('Cleanup Previous Containers') {
+            steps {
+                script {
+                    sh 'docker-compose down'
+                }
+            }
+        }
+
         stage('Build and Test') {
             steps {
-                sh 'docker-compose build'
-                sh 'docker-compose run web python manage.py test'
+                script {
+                    sh 'docker-compose build'
+                    sh 'docker-compose run web python manage.py test'
+                }
             }
         }
+
         stage('Deploy') {
             steps {
-                sh 'docker-compose up -d'
+                script {
+                    sh 'docker-compose up -d'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Clean up Docker resources
+                sh 'docker system prune -a --volumes'
             }
         }
     }
