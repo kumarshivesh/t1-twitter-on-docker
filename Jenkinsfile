@@ -42,8 +42,7 @@ pipeline {
     post {
         always {
             script {
-                // Clean up Docker resources (comment out this line temporarily)
-                // sh 'echo "y" | docker system prune -a --volumes'
+                echo 'Skipping Docker cleanup for now'
             }
         }
     }
