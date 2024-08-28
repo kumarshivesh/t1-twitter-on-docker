@@ -1,5 +1,11 @@
 pipeline {
-    agent any
+    agent {
+        dockerfile {
+            filename 'jenkins/Dockerfile'
+            dir '.'
+            additionalBuildArgs '--no-cache'
+        }
+    }
 
     stages {
         stage('Checkout') {
@@ -40,9 +46,8 @@ pipeline {
         always {
             script {
                 // Clean up Docker resources
-                sh 'echo "y" | docker system prune -a --volumes'
+                echo 'Skipping Docker cleanup for now'
             }
         }
     }
-
 }
